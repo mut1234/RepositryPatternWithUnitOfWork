@@ -2,8 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using RepoPattrenWithUnitOfWork.Core;
 using RepoPattrenWithUnitOfWork.Core.Const;
+using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Interface;
+using RepoPattrenWithUnitOfWork.Core.Interface.Service;
 using RepoPattrenWithUnitOfWork.Core.Models;
+using RepoPattrenWithUnitOfWork.Core.Service;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace RepositryPatternWithUnitOfWork.Api.Controllers
@@ -14,49 +17,60 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
     {
         //private readonly IBaseRepository<book> _booksRepositry;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly BookService _BookService;
 
-        public BooksController(IUnitOfWork unitOfWork)
+        //public BooksController(IUnitOfWork unitOfWork)
+        //{
+        //    _unitOfWork = unitOfWork;
+        //}
+        public BooksController(BookService BookService)
         {
-            _unitOfWork = unitOfWork;
+            _BookService = BookService;
         }
 
-        [HttpGet]
-        public IActionResult GetById(int id)
+        [HttpGet("GetByIdAsync")]
+        public async Task<IActionResult> GetByIdAsync(int id)
         {
-
-            return Ok(_unitOfWork.Books.GetById(id));
-
+            return Ok(await _BookService.GetByIdAsync(id));
         }
 
         [HttpGet("GetAll")]
         public IActionResult GetAll()
         {
-            return Ok(_unitOfWork.Books.GetAll());
+            return Ok(_BookService.GetAll());
         }
         [HttpGet("GetByName")]
-        public IActionResult GetByName()
+        public IActionResult GetByName(String BookName)
         {
-            return Ok(_unitOfWork.Books.Find(e=>e.Title== "New Book", new[] { "Author" }));// send name of table that we want include
-        }
-        [HttpGet("GetAllWithAuthors")]
-        public IActionResult GetAllWithAuthors()
-        {
-            return Ok(_unitOfWork.Books.FindAll(e => e.Title.Contains("New Book"), new[] { "Author" }));// send name of table that we want include
-        }
-        [HttpGet("GetOrderd")]
-        public IActionResult GetOrderd()
-        {
-            //return Ok(_unitOfWork.Books.FindAll(e => e.Title.Contains("New Book"), null,null,b=>b.Id));//it will take orderbyAssending by default 
-            return Ok(_unitOfWork.Books.FindAll(e => e.Title.Contains("New Book"), null,null,b=>b.Id,OrderBy.Dssending));
+            return Ok(_BookService.FindAll(BookName));
         }
 
-        [HttpPost("AddOne")]
-        public IActionResult AddOne()
+        [HttpPut("Update")]
+        public IActionResult Update(BookDto entity)
         {
-            var book = _unitOfWork.Books.Add(new book { Title = "Test 4", AuthorId = 1 });
-            _unitOfWork.Complete(); // to save book using unit of work
-            return Ok(book);
+            return Ok(_BookService.update(entity));
         }
+
+        //[HttpGet("GetAllWithAuthors")]
+        //public IActionResult GetAllWithAuthors()
+        //{
+        //    return Ok(BookService.FindAll(e => e.Title.Contains("New Book"), new[] { "Author" }));// send name of table that we want include
+        //}
+        //[HttpGet("GetOrderd")]
+        //public IActionResult GetOrderd()
+        //{
+        //    //return Ok(BookService.FindAll(e => e.Title.Contains("New Book"), null,null,b=>b.Id));//it will take orderbyAssending by default 
+        //    return Ok(BookService.FindAll(e => e.Title.Contains("New Book"), null,null,b=>b.Id,OrderBy.Dssending));
+        //}
+
+        // have issue
+        //[HttpPost("AddOne")]
+        //public IActionResult AddOne()
+        //{
+        //    var book = _unitOfWork.Books.Add(new book { Title = "Test 4", AuthorId = 1 });
+        //    _unitOfWork.Complete(); // to save book using unit of work
+        //    return Ok(book);
+        //}
 
         // this code was for RepositryPattern 
 

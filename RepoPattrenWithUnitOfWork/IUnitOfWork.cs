@@ -1,4 +1,5 @@
-﻿using RepoPattrenWithUnitOfWork.Core.Interface;
+﻿using RepoPattrenWithUnitOfWork.Core.Data;
+using RepoPattrenWithUnitOfWork.Core.Interface;
 using RepoPattrenWithUnitOfWork.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -11,8 +12,10 @@ namespace RepoPattrenWithUnitOfWork.Core
     public interface IUnitOfWork : IDisposable
     {
         IBaseRepository<Author> Authors { get; }
+        IBaseRepository<book> Books { get; }
+
         //IBaseRepository<book> Books { get; }
-        IBooksRepository Books { get; }
+        //IBooksRepository Books { get; }
 
         int Complete();
 
