@@ -24,14 +24,14 @@ namespace RepoPattrenWithUnitOfWork.Core.Service
 
         public int Add(BookDto DtoBook)
         {
-            var entity = _mapper.Map<book>(DtoBook);
+            var entity = _mapper.Map<Book>(DtoBook);
             return entity.Id;
 
         }
 
         public void Delete(BookDto entity)
         {
-            var entity2 = _mapper.Map<book>(entity);
+            var entity2 = _mapper.Map<Book>(entity);
             _unitOfWork.Books.Delete(entity2);
         }
 
@@ -49,9 +49,9 @@ namespace RepoPattrenWithUnitOfWork.Core.Service
             return result;
         }
 
-        public IEnumerable<BookDto> GetAll()
+        public async Task<IEnumerable<BookDto>> GetAll()
         {
-            var entity2 =  _unitOfWork.Books.GetAll();
+            var entity2 = await  _unitOfWork.Books.GetAll();
            return _mapper.Map< IEnumerable<BookDto>>(entity2);
         }
 
@@ -64,7 +64,7 @@ namespace RepoPattrenWithUnitOfWork.Core.Service
 
         public BookDto update(BookDto entity)
         {
-            var entity2 = _mapper.Map<book>(entity);
+            var entity2 = _mapper.Map<Book>(entity);
             var result = _unitOfWork.Books.update(entity2);
             return _mapper.Map<BookDto>(result);
         }

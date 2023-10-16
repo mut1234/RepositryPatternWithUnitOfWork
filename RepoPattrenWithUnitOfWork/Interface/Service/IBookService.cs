@@ -11,7 +11,7 @@ namespace RepoPattrenWithUnitOfWork.Core.Interface.Service
     public interface IBookService
     {
         Task<BookDto> GetByIdAsync(int id);
-        IEnumerable<BookDto> GetAll();
+        Task<IEnumerable<BookDto>> GetAll();
         BookDto Find(int id);//int only
         IEnumerable<BookDto> FindAll(String name);//name
 

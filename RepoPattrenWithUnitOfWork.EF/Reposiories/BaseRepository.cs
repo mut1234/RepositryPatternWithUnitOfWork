@@ -19,9 +19,9 @@ namespace RepoPattrenWithUnitOfWork.EF.Reposiories
             _context = context;
         }
 
-        public IEnumerable<T> GetAll()
+        public async Task< IEnumerable<T>> GetAll()
         {
-            return _context.Set<T>().ToList();
+            return await _context.Set<T>().ToListAsync();
         }
 
         public T GetById(int id)
@@ -86,8 +86,10 @@ namespace RepoPattrenWithUnitOfWork.EF.Reposiories
             }
             return query.ToList();
         }
-        public T Add(T entity) { 
-            _context.Set<T>().Add(entity);
+        public T Add(T entity) {
+
+             _context.Set<T>().Add(entity);
+
           //  _context.SaveChanges();
 
             return entity;

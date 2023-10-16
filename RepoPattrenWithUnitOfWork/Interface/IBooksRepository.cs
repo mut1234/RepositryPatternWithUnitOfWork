@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace RepoPattrenWithUnitOfWork.Core.Interface
 {
-    public interface IBooksRepository : IBaseRepository<book>
+    public interface IBooksRepository : IBaseRepository<Book>
     {
-        IEnumerable<book> SpecialMethod();
+        IEnumerable<Book> SpecialMethod();
     }
 }

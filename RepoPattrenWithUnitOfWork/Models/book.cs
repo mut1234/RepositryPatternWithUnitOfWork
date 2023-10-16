@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace RepoPattrenWithUnitOfWork.Core.Models
 
 {
-    public class book
+    public class Book
     {
         public int Id { get; set; }
         [Required,MaxLength(250)]

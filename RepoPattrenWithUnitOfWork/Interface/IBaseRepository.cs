@@ -12,7 +12,7 @@ namespace RepoPattrenWithUnitOfWork.Core.Interface
     {
          T GetById(int id);
          Task<T> GetByIdAsync(int id);
-         IEnumerable<T> GetAll();
+         Task<IEnumerable<T>> GetAll();
          T Find(Expression<Func<T, bool>> predicate,string[] includes=null);
          IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate,string[] includes=null);
 

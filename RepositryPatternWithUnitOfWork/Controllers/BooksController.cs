@@ -17,13 +17,13 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
     {
         //private readonly IBaseRepository<book> _booksRepositry;
         private readonly IUnitOfWork _unitOfWork;
-        private readonly BookService _BookService;
+        private readonly IBookService _BookService;
 
         //public BooksController(IUnitOfWork unitOfWork)
         //{
         //    _unitOfWork = unitOfWork;
         //}
-        public BooksController(BookService BookService)
+        public BooksController(IBookService BookService)
         {
             _BookService = BookService;
         }
@@ -35,9 +35,9 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
         }
 
         [HttpGet("GetAll")]
-        public IActionResult GetAll()
+        public async Task <IActionResult> GetAll()
         {
-            return Ok(_BookService.GetAll());
+            return Ok(await _BookService.GetAll());
         }
         [HttpGet("GetByName")]
         public IActionResult GetByName(String BookName)

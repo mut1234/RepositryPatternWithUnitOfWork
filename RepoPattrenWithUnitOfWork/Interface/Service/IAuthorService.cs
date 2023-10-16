@@ -1,4 +1,6 @@
-﻿using RepoPattrenWithUnitOfWork.Core.Const;
+﻿using CSharpFunctionalExtensions;
+using RepoPattrenWithUnitOfWork.Core.Const;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Models;
 using System;
@@ -14,20 +16,18 @@ namespace RepoPattrenWithUnitOfWork.Core.Interface.Service
     {
 
      //   Author? GetById(int id);
-        Task<DtoAuthor> GetByIdAsync(int id);
-        IEnumerable<DtoAuthor> GetAll();
-        DtoAuthor Find(int id);//int only
-        IEnumerable<DtoAuthor> FindAll(String name);//name
+        Task<AuthorDto> GetByIdAsync(int id);
+        Task<IEnumerable<AuthorDto>> GetAll();
+        AuthorDto Find(int id);//int only
+        Task<IEnumerable<AuthorDto>> FindAll(String name);//name
 
-        int Add(DtoAuthor DtoAuthor);  // take dto return  int
+        //  Task<int> Add(AuthorDto DtoAuthor);  // take dto return  int
+        Task<AddAuthorResponseDto> Add(AddAuthorCommand DtoAuthor);
+        AuthorDto Update(AuthorDto entity);
 
-        DtoAuthor Update(DtoAuthor entity);
+        Task<Result<string>> Delete(DeleteAuthorCommand DtoAuthor);
 
-        void Delete(DtoAuthor entity);
-
-        void Attach(DtoAuthor entity);
+        void Attach(AuthorDto entity);
         int Count();
- 
-
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Models;
 using System;
@@ -12,11 +13,14 @@ namespace RepoPattrenWithUnitOfWork.Core
     public class MappingProfile : Profile
     {
         public MappingProfile() {
-            CreateMap<book, BookDto>()//s = source ,d = destination
+            CreateMap<Book, BookDto>()//s = source ,d = destination
                 .ReverseMap();
 
-            CreateMap<Author, DtoAuthor>()//.ForMember(d => d.Id, s => s.MapFrom(s => s.Id))//s = source ,d = destination
+            CreateMap<Author, AuthorDto>()//.ForMember(d => d.Id, s => s.MapFrom(s => s.Id))//s = source ,d = destination
             .ReverseMap();
+
+            CreateMap<AddAuthorCommand, Author > ();
+            CreateMap<DeleteAuthorCommand, Author > ();
         }
     }
 

@@ -16,7 +16,7 @@ namespace RepoPattrenWithUnitOfWork.EF
         }
 
         public DbSet<Author> Authors { get; set; }
-        public DbSet<book> Books { get; set; }
+        public DbSet<Book> Books { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

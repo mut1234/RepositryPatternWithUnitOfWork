@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RepoPattrenWithUnitOfWork.Core.Data
 {
-    public class DtoAuthor
+    public class AuthorDto
     {
         public int Id { get; set; }
         [Required, MaxLength(150)]

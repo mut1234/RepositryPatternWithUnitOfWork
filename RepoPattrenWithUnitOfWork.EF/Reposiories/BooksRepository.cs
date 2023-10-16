@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace RepoPattrenWithUnitOfWork.EF.Reposiories
 {
-    public class BooksRepository : BaseRepository<book>, IBooksRepository
+    public class BooksRepository : BaseRepository<Book>, IBooksRepository
     {
         private readonly ApplicationDbContext _context;
 
@@ -16,7 +16,7 @@ namespace RepoPattrenWithUnitOfWork.EF.Reposiories
         {
         }
 
-        public IEnumerable<book> SpecialMethod()
+        public IEnumerable<Book> SpecialMethod()
         {
             throw new NotImplementedException();
         }

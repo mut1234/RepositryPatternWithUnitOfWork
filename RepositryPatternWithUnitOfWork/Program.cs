@@ -1,8 +1,13 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RepoPattrenWithUnitOfWork.Core;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys;
 using RepoPattrenWithUnitOfWork.Core.Interface;
+using RepoPattrenWithUnitOfWork.Core.Interface.Service;
+using RepoPattrenWithUnitOfWork.Core.Service;
 using RepoPattrenWithUnitOfWork.EF;
 using RepoPattrenWithUnitOfWork.EF.Reposiories;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,7 +25,11 @@ b=>b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
 
 //builder.Services.AddTransient(typeof(IBaseRepository<>),typeof(BaseRepository<>));//register to baserepo inside api
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
+builder.Services.AddTransient<IBookService, BookService>();
+builder.Services.AddTransient<IAuthorService, AuthorService>();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddMediatR(Assembly.GetAssembly(typeof(GetByIdAuthorQuery)));
 
 var app = builder.Build();
 

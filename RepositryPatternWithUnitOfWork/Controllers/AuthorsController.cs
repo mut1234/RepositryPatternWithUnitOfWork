@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepoPattrenWithUnitOfWork.Core;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Interface;
 using RepoPattrenWithUnitOfWork.Core.Interface.Service;
 using RepoPattrenWithUnitOfWork.Core.Models;
 using RepoPattrenWithUnitOfWork.Core.Service;
 using RepoPattrenWithUnitOfWork.EF;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace RepositryPatternWithUnitOfWork.Api.Controllers
 {
@@ -16,34 +20,51 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
     {
         //private readonly IBaseRepository<Author> _authorsRepositry;
         //private readonly IUnitOfWork _unitOfWork;
-        private readonly AuthorService _AuthorService;
 
-        public AuthorsController(AuthorService authorService)
+        private readonly IAuthorService _AuthorService;
+        private readonly IMediator _mediatR;
+        private readonly ILogger<AuthorsController> _logger;
+
+        public AuthorsController(IAuthorService authorService, IMediator mediatR, ILogger<AuthorsController> logger)
         {
             _AuthorService = authorService;
+            _mediatR = mediatR;
+            _logger = logger;
         }
 
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync([FromBody] GetByIdAuthorQuery query)
         {
-            return Ok(await _AuthorService.GetByIdAsync(id));
+            var result = await _mediatR.Send(query);
+
+            return result != null ? (IActionResult)Ok(result) : NotFound();
         }
         [HttpGet("GetAll")]
-        public IActionResult GetAll(string name)
+        public async Task<IActionResult> GetAll([FromBody] GetAllAuthorQuery query)
         {
-            return Ok(_AuthorService.FindAll(name));
+        
+            var result = await _mediatR.Send(query);
+
+            return result != null ? (IActionResult)Ok(result) : NotFound();
         }
         [HttpPost("Add")]
-        public IActionResult Add(DtoAuthor entity)
+        public async Task<IActionResult> Add([FromBody] AddAuthorCommand command)
         {
-            return Ok(_AuthorService.Add(entity));
+
+            var result = await _mediatR.Send(command);
+            return result != null ? (IActionResult) Ok(result) : NotFound();
+
+            //return Ok(_AuthorService.Add(entity));
         }   
 
         [HttpDelete("Delete")]
-        public IActionResult Delete(DtoAuthor entity)
+        public async Task<IActionResult> Delete([FromBody] DeleteAuthorCommand command)
         {
-            _AuthorService.Delete(entity);
-            return Ok();
+            var result = await _mediatR.Send(command);
+            return result.Value != null ? (IActionResult)Ok(result.Value) : NotFound();
+
+            //_AuthorService.Delete(entity);
+            //return Ok();
         }
         
         [HttpGet("Find")]
@@ -58,7 +79,7 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
         }        
     
         [HttpPut("Update")]
-        public IActionResult Update(DtoAuthor entity)
+        public IActionResult Update(AuthorDto entity)
         {
             return Ok(_AuthorService.Update(entity));
         }

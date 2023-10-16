@@ -12,12 +12,12 @@ namespace RepoPattrenWithUnitOfWork.Core
     public interface IUnitOfWork : IDisposable
     {
         IBaseRepository<Author> Authors { get; }
-        IBaseRepository<book> Books { get; }
+        IBaseRepository<Book> Books { get; }
 
         //IBaseRepository<book> Books { get; }
         //IBooksRepository Books { get; }
 
-        int Complete();
+        Task<int> CompleteAsync();
 
     }
 }
