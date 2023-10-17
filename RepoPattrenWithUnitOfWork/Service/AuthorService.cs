@@ -53,7 +53,7 @@ namespace RepoPattrenWithUnitOfWork.Core.Service
         public async Task<FindAuthorResponseDto> FindByIdAsync(FindAuthorQuery request)
         {
 
-            var entity =  _unitOfWork.Authors.FindByIdAsync(e => e.Id == request.Id);
+            var entity = await _unitOfWork.Authors.FindByIdAsync(e => e.Id == request.Id);
             var result = _mapper.Map<FindAuthorResponseDto>(entity);
 
             return  result;

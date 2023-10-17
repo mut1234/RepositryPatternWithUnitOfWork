@@ -68,8 +68,10 @@ namespace RepoPattrenWithUnitOfWork.Core.Service
 
         public async Task<UpdateBookResponseDto> Update(UpdateBookCommand request)
         {
-            var entity2 = _mapper.Map<Book>(request);
+            var entity2 = await _unitOfWork.Books.GetByIdAsync(request.Id);
+            entity2.Title = request.Title;
             var result = _unitOfWork.Books.update(entity2);
+
             await _unitOfWork.CompleteAsync();
 
             return new UpdateBookResponseDto { Message = "Updated Successfully" };
