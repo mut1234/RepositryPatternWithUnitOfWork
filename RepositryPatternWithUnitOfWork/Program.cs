@@ -1,7 +1,7 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using RepoPattrenWithUnitOfWork.Core;
-using RepoPattrenWithUnitOfWork.Core.CQRS.Querys;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Author;
 using RepoPattrenWithUnitOfWork.Core.Interface;
 using RepoPattrenWithUnitOfWork.Core.Interface.Service;
 using RepoPattrenWithUnitOfWork.Core.Service;

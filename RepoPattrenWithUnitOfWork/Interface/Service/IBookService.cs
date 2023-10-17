@@ -1,4 +1,7 @@
-﻿using RepoPattrenWithUnitOfWork.Core.Data;
+﻿using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Book;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book;
+using RepoPattrenWithUnitOfWork.Core.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +13,14 @@ namespace RepoPattrenWithUnitOfWork.Core.Interface.Service
 {
     public interface IBookService
     {
-        Task<BookDto> GetByIdAsync(int id);
-        Task<IEnumerable<BookDto>> GetAll();
+        Task<GetByIdBookResponseDto> GetByIdAsync(GetByIdBookQuery request);
+        Task<IEnumerable<GetAllBookResponseDto>> GetAll();
         BookDto Find(int id);//int only
-        IEnumerable<BookDto> FindAll(String name);//name
+        Task<IEnumerable<GetByNameResponseDto>> FindAll(GetByNameQuery request);//name
 
         int Add(BookDto DtoBook); // take dto return  int
 
-
-        BookDto update(BookDto entity);
+        Task<UpdateBookResponseDto> Update(UpdateBookCommand request);
 
         void Delete(BookDto entity);
     }

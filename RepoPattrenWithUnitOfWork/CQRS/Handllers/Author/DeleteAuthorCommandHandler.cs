@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using RepoPattrenWithUnitOfWork.Core.CQRS.Commands;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
 using RepoPattrenWithUnitOfWork.Core.Interface.Service;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RepoPattrenWithUnitOfWork.Core.CQRS.Handllers
+namespace RepoPattrenWithUnitOfWork.Core.CQRS.Handllers.Author
 {
     public class DeleteAuthorCommandHandler : IRequestHandler<DeleteAuthorCommand, Result<string>>
     {

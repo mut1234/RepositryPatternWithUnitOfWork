@@ -1,12 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepoPattrenWithUnitOfWork.Core;
 using RepoPattrenWithUnitOfWork.Core.Const;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Book;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Interface;
 using RepoPattrenWithUnitOfWork.Core.Interface.Service;
 using RepoPattrenWithUnitOfWork.Core.Models;
 using RepoPattrenWithUnitOfWork.Core.Service;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static System.Reflection.Metadata.BlobBuilder;
 
 namespace RepositryPatternWithUnitOfWork.Api.Controllers
@@ -18,37 +22,57 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
         //private readonly IBaseRepository<book> _booksRepositry;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IBookService _BookService;
+        private readonly IMediator _mediatR;
+        private readonly ILogger<BooksController> _logger;
 
         //public BooksController(IUnitOfWork unitOfWork)
         //{
         //    _unitOfWork = unitOfWork;
         //}
-        public BooksController(IBookService BookService)
+        public BooksController(IBookService BookService, IMediator mediatR, ILogger<BooksController> logger)
         {
             _BookService = BookService;
+            _mediatR = mediatR;
+            _logger = logger;
         }
 
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync(int id)
+        public async Task<IActionResult> GetByIdAsync([FromQuery] GetByIdBookQuery query)
         {
-            return Ok(await _BookService.GetByIdAsync(id));
+
+            var result = await _mediatR.Send(query);
+
+            return result.Value != null ? (IActionResult)Ok(result.Value) : NotFound();
+
+            //return Ok(await _BookService.GetByIdAsync(id));
         }
 
         [HttpGet("GetAll")]
-        public async Task <IActionResult> GetAll()
+        public async Task <IActionResult> GetAll([FromQuery] GetAllBookQuery query)
         {
-            return Ok(await _BookService.GetAll());
+            var result = await _mediatR.Send(query);
+
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+            // return Ok(await _BookService.GetAll());
         }
         [HttpGet("GetByName")]
-        public IActionResult GetByName(String BookName)
+        public async Task<IActionResult> GetByName([FromQuery] GetByNameQuery query)
         {
-            return Ok(_BookService.FindAll(BookName));
+            var result = await _mediatR.Send(query);
+
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+
+          //  return Ok(_BookService.FindAll(BookName));
         }
 
         [HttpPut("Update")]
-        public IActionResult Update(BookDto entity)
+        public async Task<IActionResult> Update([FromBody] UpdateBookCommand command)
         {
-            return Ok(_BookService.update(entity));
+            var result = await _mediatR.Send(command);
+
+            return result.Value != null ? (IActionResult)Ok(result.Value) : NotFound();
+
+            //return Ok(_BookService.update(entity));
         }
 
         //[HttpGet("GetAllWithAuthors")]

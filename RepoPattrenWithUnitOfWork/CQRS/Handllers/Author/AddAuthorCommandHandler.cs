@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
-using RepoPattrenWithUnitOfWork.Core.CQRS.Commands;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
 using RepoPattrenWithUnitOfWork.Core.Interface.Service;
 
 
-namespace RepoPattrenWithUnitOfWork.Core.CQRS.Handllers
+namespace RepoPattrenWithUnitOfWork.Core.CQRS.Handllers.Author
 {
     public class AddAuthorCommandHandler : IRequestHandler<AddAuthorCommand, AddAuthorResponseDto>
     {
@@ -14,7 +14,7 @@ namespace RepoPattrenWithUnitOfWork.Core.CQRS.Handllers
         public AddAuthorCommandHandler(IAuthorService authorService, ILogger<AddAuthorCommandHandler> logger)
         {
             _authorService = authorService;
-                   _logger = logger;
+            _logger = logger;
         }
 
         public async Task<AddAuthorResponseDto> Handle(AddAuthorCommand request, CancellationToken cancellationToken)

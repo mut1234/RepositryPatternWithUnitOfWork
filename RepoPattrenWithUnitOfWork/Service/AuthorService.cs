@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
+using MediatR;
 using RepoPattrenWithUnitOfWork.Core.Const;
-using RepoPattrenWithUnitOfWork.Core.CQRS.Commands;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Author;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Interface.Service;
 using RepoPattrenWithUnitOfWork.Core.Models;
@@ -48,42 +50,47 @@ namespace RepoPattrenWithUnitOfWork.Core.Service
             return Result.Success( KeysEnum.DeletedSuccessfully);
         }
 
-        public AuthorDto Find(int id)
+        public async Task<FindAuthorResponseDto> FindByIdAsync(FindAuthorQuery request)
         {
 
-            var entity = _unitOfWork.Authors.Find(e => e.Id == id);
-            var result = _mapper.Map<AuthorDto>(entity);
-            return result;
+            var entity =  _unitOfWork.Authors.FindByIdAsync(e => e.Id == request.Id);
+            var result = _mapper.Map<FindAuthorResponseDto>(entity);
 
-        }
-
-        public async Task<IEnumerable<AuthorDto>> FindAll(string name)
-        {
-            var entity = _unitOfWork.Authors.FindAll(e => e.Name == name);
-            var result = _mapper.Map<IEnumerable<AuthorDto>>(entity);
             return  result;
         }
 
-        public async Task<IEnumerable<AuthorDto>> GetAll()
+        public async Task<IEnumerable<FindAllAuthorResponseDto>> FindAll(FindAllAuthorQuery request)
         {
-            var entity2 =await _unitOfWork.Authors.GetAll();
-            return _mapper.Map<IEnumerable<AuthorDto>>(entity2);
-        }
+            var entity = await _unitOfWork.Authors.FindAll(e => e.Name == request.Name);
+            var result = _mapper.Map<IEnumerable<FindAllAuthorResponseDto>>(entity);
 
-        public async Task<AuthorDto> GetByIdAsync(int id)
-        {
-            var data = await _unitOfWork.Authors.GetByIdAsync(id);
-            var result = _mapper.Map<AuthorDto>(data);
             return result;
         }
-
-        public AuthorDto Update(AuthorDto entity)
+  
+        public async Task<IEnumerable<GetAllAuthorResponseDto>> GetAll()
         {
-            var entity2 = _mapper.Map<Author>(entity);
-            var result = _unitOfWork.Authors.update(entity2);
-            return _mapper.Map<AuthorDto>(result);
+            var entity2 =await _unitOfWork.Authors.GetAll();
+            return _mapper.Map<IEnumerable<GetAllAuthorResponseDto>>(entity2);
         }
 
-     
+        public async Task<GetByIdAuthorResponseDto> GetByIdAsync(GetByIdAuthorQuery request)
+        {
+            var data = await _unitOfWork.Authors.GetByIdAsync(request.Id);
+            var result = _mapper.Map<GetByIdAuthorResponseDto>(data);
+            return result;
+        }
+        
+
+
+        public async Task<UpdateAuthorDto> Update(UpdateAuthorCommand request)
+        {
+            var entity2 = _mapper.Map<Author>(request);
+            var result = _unitOfWork.Authors.update(entity2);
+            await _unitOfWork.CompleteAsync();
+
+            return new UpdateAuthorDto { Message = "Updated Successfully" };
+        }
+
+      
     }
 }

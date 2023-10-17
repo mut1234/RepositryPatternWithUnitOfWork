@@ -5,6 +5,9 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Book;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Interface.Service;
 using RepoPattrenWithUnitOfWork.Core.Models;
@@ -37,36 +40,39 @@ namespace RepoPattrenWithUnitOfWork.Core.Service
 
         public BookDto Find(int id)
         {
-            var entity = _unitOfWork.Books.Find(e => e.Id == id);
+            var entity = _unitOfWork.Books.FindByIdAsync(e => e.Id == id);
             var result = _mapper.Map<BookDto>(entity);
             return result;
         }
 
-        public IEnumerable<BookDto> FindAll(string name)
+        public async Task<IEnumerable<GetByNameResponseDto>> FindAll(GetByNameQuery request)
         {
-            var entity = _unitOfWork.Books.FindAll(e => e.Title == name);
-            var result = _mapper.Map<IEnumerable< BookDto>>(entity);
+            var entity = await _unitOfWork.Books.FindAll(e => e.Title == request.Title);
+            var result = _mapper.Map<IEnumerable<GetByNameResponseDto>>(entity);
             return result;
         }
 
-        public async Task<IEnumerable<BookDto>> GetAll()
+        public async Task<IEnumerable<GetAllBookResponseDto>> GetAll()
         {
             var entity2 = await  _unitOfWork.Books.GetAll();
-           return _mapper.Map< IEnumerable<BookDto>>(entity2);
+           return _mapper.Map<IEnumerable<GetAllBookResponseDto>>(entity2);
         }
 
-        public async Task<BookDto> GetByIdAsync(int id)
+        public async Task<GetByIdBookResponseDto> GetByIdAsync(GetByIdBookQuery request)
         {
-            var data = await _unitOfWork.Books.GetByIdAsync(id);
-            var result = _mapper.Map<BookDto>(data);
+            var data = await _unitOfWork.Books.GetByIdAsync(request.Id);
+            var result = _mapper.Map<GetByIdBookResponseDto>(data);
             return result;
         }
 
-        public BookDto update(BookDto entity)
+
+        public async Task<UpdateBookResponseDto> Update(UpdateBookCommand request)
         {
-            var entity2 = _mapper.Map<Book>(entity);
+            var entity2 = _mapper.Map<Book>(request);
             var result = _unitOfWork.Books.update(entity2);
-            return _mapper.Map<BookDto>(result);
+            await _unitOfWork.CompleteAsync();
+
+            return new UpdateBookResponseDto { Message = "Updated Successfully" };
         }
     }
 }

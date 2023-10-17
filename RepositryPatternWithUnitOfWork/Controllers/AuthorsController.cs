@@ -2,14 +2,15 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepoPattrenWithUnitOfWork.Core;
-using RepoPattrenWithUnitOfWork.Core.CQRS.Commands;
-using RepoPattrenWithUnitOfWork.Core.CQRS.Querys;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Author;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Interface;
 using RepoPattrenWithUnitOfWork.Core.Interface.Service;
 using RepoPattrenWithUnitOfWork.Core.Models;
 using RepoPattrenWithUnitOfWork.Core.Service;
 using RepoPattrenWithUnitOfWork.EF;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace RepositryPatternWithUnitOfWork.Api.Controllers
@@ -33,14 +34,14 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
         }
 
         [HttpGet("GetByIdAsync")]
-        public async Task<IActionResult> GetByIdAsync([FromBody] GetByIdAuthorQuery query)
+        public async Task<IActionResult> GetByIdAsync([FromQuery] GetByIdAuthorQuery query)
         {
             var result = await _mediatR.Send(query);
 
-            return result != null ? (IActionResult)Ok(result) : NotFound();
+            return result.Value != null ? (IActionResult)Ok(result.Value) : NotFound();
         }
         [HttpGet("GetAll")]
-        public async Task<IActionResult> GetAll([FromBody] GetAllAuthorQuery query)
+        public async Task<IActionResult> GetAll([FromQuery] GetAllAuthorQuery query)
         {
         
             var result = await _mediatR.Send(query);
@@ -68,20 +69,31 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
         }
         
         [HttpGet("Find")]
-        public IActionResult Find(int id)
+        public async Task<IActionResult> Find([FromQuery] FindAuthorQuery query)
         {
-            return Ok(_AuthorService.Find(id));
+            var result = await _mediatR.Send(query);
+
+            return result.Value != null ? (IActionResult)Ok(result.Value) : NotFound();
+
+            //return Ok(_AuthorService.Find(id));
         }
         [HttpGet("FindAll")]
-        public IActionResult FindAll(string name)
+        public async Task<IActionResult> FindAll([FromQuery] FindAllAuthorQuery query)
         {
-            return Ok(_AuthorService.FindAll(name));
+            var result = await _mediatR.Send(query);
+
+            return result.Value != null ? (IActionResult)Ok(result.Value) : NotFound();
+
+           // return Ok(_AuthorService.FindAll(name));
         }        
     
         [HttpPut("Update")]
-        public IActionResult Update(AuthorDto entity)
+        public async Task<IActionResult> Update([FromBody] UpdateAuthorCommand command)
         {
-            return Ok(_AuthorService.Update(entity));
+            var result = await _mediatR.Send(command);
+            return result.Value != null ? (IActionResult)Ok(result.Value) : NotFound();
+
+            //return Ok(_AuthorService.Update(entity));
         }
 
         //[HttpGet]

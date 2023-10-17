@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RepoPattrenWithUnitOfWork.Core.CQRS.Commands
+namespace RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author
 {
     public class AddAuthorCommand : IRequest<AddAuthorResponseDto>
     {

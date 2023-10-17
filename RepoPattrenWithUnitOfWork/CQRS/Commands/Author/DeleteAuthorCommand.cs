@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using CSharpFunctionalExtensions;
 
 
-namespace RepoPattrenWithUnitOfWork.Core.CQRS.Commands
+namespace RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author
 {
     public class DeleteAuthorCommand : IRequest<Result<string>>
     {

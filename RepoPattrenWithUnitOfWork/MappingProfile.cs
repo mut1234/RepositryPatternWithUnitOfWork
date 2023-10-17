@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
-using RepoPattrenWithUnitOfWork.Core.CQRS.Commands;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Book;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Author;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Models;
 using System;
@@ -21,6 +24,20 @@ namespace RepoPattrenWithUnitOfWork.Core
 
             CreateMap<AddAuthorCommand, Author > ();
             CreateMap<DeleteAuthorCommand, Author > ();
+            CreateMap<UpdateAuthorCommand, Author > ();
+            CreateMap<Author, FindAuthorResponseDto>();
+            CreateMap<Author, FindAllAuthorResponseDto>();
+            CreateMap<Author, GetByIdAuthorResponseDto>();
+            CreateMap<Author, GetAllAuthorResponseDto>();
+
+            CreateMap<Book, GetByIdBookResponseDto>();
+            CreateMap<Book, GetAllBookResponseDto>();
+            CreateMap<Book, GetByNameResponseDto>();
+            CreateMap<UpdateBookCommand, Book>();
+
+
+
+
         }
     }
 

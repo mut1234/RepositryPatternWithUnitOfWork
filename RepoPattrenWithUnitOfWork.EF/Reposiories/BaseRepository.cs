@@ -33,7 +33,8 @@ namespace RepoPattrenWithUnitOfWork.EF.Reposiories
         {
             return await _context.Set<T>().FindAsync(id);
         }
-        public T Find(Expression<Func<T, bool>> predicate, string[] includes = null)
+
+        public async Task<T> FindByIdAsync(Expression<Func<T, bool>> predicate, string[] includes = null)
         {
             IQueryable<T> query = _context.Set<T>();// this to make not null with author relation 
             if (includes != null) { // send name of table that we want include
@@ -42,9 +43,9 @@ namespace RepoPattrenWithUnitOfWork.EF.Reposiories
                     query = query.Include(include);//include will fix null 
                 }
             }
-            return query.SingleOrDefault(predicate);
+            return await query.SingleOrDefaultAsync(predicate);
         }
-        public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, string[] includes = null)
+        public async Task<IEnumerable<T>> FindAll(Expression<Func<T, bool>> predicate, string[] includes = null)
         {
             IQueryable<T> query = _context.Set<T>();// this to make not null with author relation 
             if (includes != null)
@@ -54,7 +55,7 @@ namespace RepoPattrenWithUnitOfWork.EF.Reposiories
                     query = query.Include(include);//include will fix null 
                 }
             }
-            return query.Where(predicate).ToList();//the different here we can here return many so we use where with query
+            return await query.Where(predicate).ToArrayAsync();//the different here we can here return many so we use where with query
         }
 
         public IEnumerable<T> FindAll(Expression<Func<T, bool>> predicate, int take, int skip)
@@ -133,6 +134,5 @@ namespace RepoPattrenWithUnitOfWork.EF.Reposiories
             return _context.Set<T>().Count(predicate);
         }
 
-       
     }
 }
