@@ -5,6 +5,8 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using CSharpFunctionalExtensions;
+using RepoPattrenWithUnitOfWork.Core.Const;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Book;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book;
@@ -25,25 +27,25 @@ namespace RepoPattrenWithUnitOfWork.Core.Service
             _mapper = mapper;
         }
 
-        public int Add(BookDto DtoBook)
+        public async Task<AddBookResponseDto> Add(AddBookCommand request)
         {
-            var entity = _mapper.Map<Book>(DtoBook);
-            return entity.Id;
-
+            var entity = _mapper.Map<Book>(request);
+            entity.AuthorId = request.AuthorId;
+            _unitOfWork.Books.Add(entity);
+            await _unitOfWork.CompleteAsync();
+            return new AddBookResponseDto { Id = entity.Id };
         }
 
-        public void Delete(BookDto entity)
+        public async Task<Result<string>> Delete(DeleteBookCommand request)
         {
-            var entity2 = _mapper.Map<Book>(entity);
+            var entity2 = _mapper.Map<Book>(request);           
+            if (entity2 == null)
+            return Result.Failure<string>(KeysEnum.ENTITYNOTFOUND);
             _unitOfWork.Books.Delete(entity2);
+            await _unitOfWork.CompleteAsync();
+            return Result.Success(KeysEnum.DeletedSuccessfully);
         }
 
-        public BookDto Find(int id)
-        {
-            var entity = _unitOfWork.Books.FindByIdAsync(e => e.Id == id);
-            var result = _mapper.Map<BookDto>(entity);
-            return result;
-        }
 
         public async Task<IEnumerable<GetByNameResponseDto>> FindAll(GetByNameQuery request)
         {

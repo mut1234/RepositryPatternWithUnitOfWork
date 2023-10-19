@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using RepoPattrenWithUnitOfWork.Core;
 using RepoPattrenWithUnitOfWork.Core.Const;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Book;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book;
 using RepoPattrenWithUnitOfWork.Core.Data;
@@ -35,7 +36,14 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
             _mediatR = mediatR;
             _logger = logger;
         }
+        [HttpPost("Add")]
+        public async Task<IActionResult> Add([FromBody] AddBookCommand command)
+        {
 
+            var result = await _mediatR.Send(command);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+
+        }
         [HttpGet("GetByIdAsync")]
         public async Task<IActionResult> GetByIdAsync([FromQuery] GetByIdBookQuery query)
         {
@@ -63,6 +71,13 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
             return result != null ? (IActionResult)Ok(result) : NotFound();
 
           //  return Ok(_BookService.FindAll(BookName));
+        }
+        [HttpDelete("Delete")]
+        public async Task<IActionResult> Delete([FromBody] DeleteBookCommand command)
+        {
+            var result = await _mediatR.Send(command);
+            return result.Value != null ? (IActionResult)Ok(result.Value) : NotFound();
+
         }
 
         [HttpPut("Update")]

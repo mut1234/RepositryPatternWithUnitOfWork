@@ -34,6 +34,8 @@ namespace RepoPattrenWithUnitOfWork.Core
             CreateMap<Book, GetAllBookResponseDto>();
             CreateMap<Book, GetByNameResponseDto>();
             CreateMap<UpdateBookCommand, Book>();
+            CreateMap<DeleteBookCommand, Book>();
+            CreateMap<AddBookCommand, Book>();
 
 
 

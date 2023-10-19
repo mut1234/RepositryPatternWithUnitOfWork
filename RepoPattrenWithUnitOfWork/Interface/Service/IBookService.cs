@@ -1,4 +1,5 @@
-﻿using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
+﻿using CSharpFunctionalExtensions;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Book;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book;
 using RepoPattrenWithUnitOfWork.Core.Data;
@@ -15,13 +16,12 @@ namespace RepoPattrenWithUnitOfWork.Core.Interface.Service
     {
         Task<GetByIdBookResponseDto> GetByIdAsync(GetByIdBookQuery request);
         Task<IEnumerable<GetAllBookResponseDto>> GetAll();
-        BookDto Find(int id);//int only
         Task<IEnumerable<GetByNameResponseDto>> FindAll(GetByNameQuery request);//name
 
-        int Add(BookDto DtoBook); // take dto return  int
+        Task<AddBookResponseDto> Add(AddBookCommand request);
 
         Task<UpdateBookResponseDto> Update(UpdateBookCommand request);
 
-        void Delete(BookDto entity);
+        Task<Result<string>> Delete(DeleteBookCommand request);
     }
 }
