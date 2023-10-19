@@ -9,6 +9,7 @@ using CSharpFunctionalExtensions;
 using RepoPattrenWithUnitOfWork.Core.Const;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Book;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Author;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Interface.Service;
@@ -46,7 +47,14 @@ namespace RepoPattrenWithUnitOfWork.Core.Service
             return Result.Success(KeysEnum.DeletedSuccessfully);
         }
 
+        public async Task<FindBookResponseDto> FindByIdAsync(FindBookQuery request)
+        {
 
+            var entity = await _unitOfWork.Books.FindByIdAsync(e => e.Id == request.Id);
+            var result = _mapper.Map<FindBookResponseDto>(entity);
+
+            return result;
+        }
         public async Task<IEnumerable<GetByNameResponseDto>> FindAll(GetByNameQuery request)
         {
             var entity = await _unitOfWork.Books.FindAll(e => e.Title == request.Title);

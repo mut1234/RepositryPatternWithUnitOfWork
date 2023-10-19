@@ -1,6 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Book;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Author;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using System;
@@ -16,6 +17,7 @@ namespace RepoPattrenWithUnitOfWork.Core.Interface.Service
     {
         Task<GetByIdBookResponseDto> GetByIdAsync(GetByIdBookQuery request);
         Task<IEnumerable<GetAllBookResponseDto>> GetAll();
+        Task<FindBookResponseDto> FindByIdAsync(FindBookQuery request);
         Task<IEnumerable<GetByNameResponseDto>> FindAll(GetByNameQuery request);//name
 
         Task<AddBookResponseDto> Add(AddBookCommand request);

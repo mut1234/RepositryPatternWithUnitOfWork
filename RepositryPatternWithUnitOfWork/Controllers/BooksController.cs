@@ -5,6 +5,7 @@ using RepoPattrenWithUnitOfWork.Core;
 using RepoPattrenWithUnitOfWork.Core.Const;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Author;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Commands.Book;
+using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Author;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book;
 using RepoPattrenWithUnitOfWork.Core.Data;
 using RepoPattrenWithUnitOfWork.Core.Interface;
@@ -70,7 +71,15 @@ namespace RepositryPatternWithUnitOfWork.Api.Controllers
 
             return result != null ? (IActionResult)Ok(result) : NotFound();
 
-          //  return Ok(_BookService.FindAll(BookName));
+            //  return Ok(_BookService.FindAll(BookName));
+        }
+        [HttpGet("Find")]
+        public async Task<IActionResult> Find([FromQuery] FindBookQuery query)
+        {
+            var result = await _mediatR.Send(query);
+
+            return result.Value != null ? (IActionResult)Ok(result.Value) : NotFound();
+
         }
         [HttpDelete("Delete")]
         public async Task<IActionResult> Delete([FromBody] DeleteBookCommand command)
