@@ -49,15 +49,17 @@ namespace RepoPattrenWithUnitOfWork.EF
 
         }
     }
-    public static class DbModelsExtensions
-    {
+    // soft delete code from https://github.com/Ahmad-Hamwi/warehousing-and-accounting-management-system/blob/68fc5005c376d2a7fb622c95028ec5a28b49cc5f/Infrastructure/Persistence/Database/Triggers/SoftDeleteTrigger.cs#L7
 
-        public static IQueryable<T> FilterSoftDeletedModels<T>(this IQueryable<T> set)
-        {
-            if (typeof(T).GetInterface(nameof(ISoftDeletable)) == null)
-                return set;
+    //public static class DbModelsExtensions
+    //{
 
-            return set.Where(model => !((ISoftDeletable)model).IsDeleted);
-        }
-    }
+    //    public static IQueryable<T> FilterSoftDeletedModels<T>(this IQueryable<T> set)
+    //    {
+    //        if (typeof(T).GetInterface(nameof(ISoftDeletable)) == null)
+    //            return set;
+
+    //        return set.Where(model => !((ISoftDeletable)model).IsDeleted);
+    //    }
+    //}
 }
