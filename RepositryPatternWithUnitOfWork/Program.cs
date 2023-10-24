@@ -1,5 +1,6 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using RepoPattrenWithUnitOfWork.Core;
 using RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Author;
 using RepoPattrenWithUnitOfWork.Core.Interface;
@@ -7,6 +8,7 @@ using RepoPattrenWithUnitOfWork.Core.Interface.Service;
 using RepoPattrenWithUnitOfWork.Core.Service;
 using RepoPattrenWithUnitOfWork.EF;
 using RepoPattrenWithUnitOfWork.EF.Reposiories;
+using RepoPattrenWithUnitOfWork.EF.Triggers;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,9 +21,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(o =>
-o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
-b=>b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+{
+    o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+        b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
+    o.UseTriggers(triggersOptions => triggersOptions.AddTrigger<SoftDeleteTrigger>());
+}
+);
 
+//o.UseTriggers(triggersOptions => triggersOptions.AddTrigger<SoftDeleteTrigger>());
 
 //builder.Services.AddTransient(typeof(IBaseRepository<>),typeof(BaseRepository<>));//register to baserepo inside api
 builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
