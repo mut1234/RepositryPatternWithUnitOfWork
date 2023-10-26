@@ -11,6 +11,7 @@ namespace RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book
     public class FindBookQuery : IRequest<Result<FindBookResponseDto>>
     {
         public int Id { get; set; }
+
     }
     public class FindBookResponseDto
     {

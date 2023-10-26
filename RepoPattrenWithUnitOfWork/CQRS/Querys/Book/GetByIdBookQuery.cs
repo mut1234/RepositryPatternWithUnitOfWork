@@ -16,6 +16,7 @@ namespace RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Book
     public class GetByIdBookResponseDto
     {
         public int Id { get; set; }
+        public string Title { get; set; }
 
     }
 }

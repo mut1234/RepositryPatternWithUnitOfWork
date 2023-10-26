@@ -12,6 +12,7 @@ namespace RepoPattrenWithUnitOfWork.Core.CQRS.Querys.Author
     public class FindAuthorQuery : IRequest<Result<FindAuthorResponseDto>>
     {
         public int Id { get; set; }
+        public string Name { get; set; }
     }
     public class FindAuthorResponseDto
     {
